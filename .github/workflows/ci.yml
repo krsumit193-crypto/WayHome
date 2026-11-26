@@ -1,6 +1,7 @@
 name: CI
 on:
   push:
+    branches: [main]
   pull_request:
 
 jobs:
@@ -13,8 +14,19 @@ jobs:
           distribution: temurin
           java-version: 17
           cache: maven
-      - run: mvn -B verify
+      # Maven Central occasionally answers 429 while CI warms its cache.
+      # Retry a couple of times instead of failing a healthy build.
+      - name: Build and test
         working-directory: backend
+        run: |
+          for attempt in 1 2 3; do
+            if mvn -B -ntp verify; then
+              exit 0
+            fi
+            echo "Maven attempt $attempt failed, retrying in 20s..."
+            sleep 20
+          done
+          exit 1
 
   frontend:
     runs-on: ubuntu-latest
