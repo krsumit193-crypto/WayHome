@@ -1,0 +1,5 @@
+train_number,seq,station_code,arrival,departure,day,distance_km
+90001,1,JP,,08:00,0,0
+90001,2,NDLS,13:30,,0,308
+90002,1,NDLS,,15:00,0,0
+90002,2,KQR,06:45,,1,1095
